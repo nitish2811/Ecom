@@ -1,0 +1,123 @@
+{%extends 'shop/basic.html'%}
+  {% block body %}
+
+<div class="container">
+    <div class="col">
+        <h1>Track your order here</h1>
+        <form class="row g-3" method="post" action="#" id="formtrack" name="formtrack">{% csrf_token %}
+        <div >
+
+            <div class="col-12">
+    <label for="inputEmai" class="form-label">Enter order ID</label>
+    <input type="text" class="form-control" id="orderid" name="orderid">
+  </div>
+
+            <div class="col-12">
+    <label for="inputEmai" class="form-label">Enter city</label>
+    <input type="text" class="form-control" id="city" name="city">
+  </div>
+
+
+        </div>
+    <button type="submit" class="btn btn-primary">Track Order</button>
+</form>
+    </div>
+    <div class="col">
+        <h1>Order Status</h1>
+        <div >
+            <ul class="list-group" id="items">
+  
+  
+
+</ul>
+
+
+        </div>
+
+
+    </div>
+  <div class="col">
+        <h1>Your order details</h1>
+        <div >
+            <ul class="list-group" id="odeta">
+  
+  
+
+</ul>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+ $('#formtrack').submit(function(event) {
+    $('#items').empty();
+    var formData = {
+        'orderid': $('input[name=orderid]').val(),
+        'city': $('input[name=city]').val(),
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    };   
+    
+    $.ajax({
+            type: 'POST',
+            url: '/shop/tracker/',
+            data:  formData,
+            encode: true
+    })
+        .done(function(data)
+        {
+            console.log(data);
+            if(data=='error')
+            {
+             $('#odeta').empty();
+             mystr=`<li class="list-group-item">Sorry. no item for given id and city, please try with correct details</li>`
+             $('#items').append(mystr);
+             $('#odeta').append(mystr);
+            }
+            else
+            {
+                data=JSON.parse(data);
+                updates=data[0];
+                a=updates.length;
+                console.log(a);
+                for(i=0;i<a;i++)
+               {
+                let text=updates[i]['text'];
+                let time=updates[i]['time'];
+                mystr=`<li class="list-group-item">${text}   ${time}</li>`
+                $('#items').append(mystr);
+               }
+
+               odeta=JSON.parse(data[1]);
+               console.log(odeta);
+               for(item in odeta){
+                name=odeta[item][1];
+                qty=odeta[item][0];
+                mystr=`<li class="list-group-item">${name}   ${qty}</li>`
+                $('#odeta').append(mystr);
+
+               }
+            }
+
+            
+
+        });
+
+event.preventDefault();
+
+})
+</script>
+
+
+
+{% endblock%}
+

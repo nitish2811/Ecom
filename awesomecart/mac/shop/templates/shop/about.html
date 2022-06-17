@@ -1,0 +1,86 @@
+{% extends 'shop/basic.html'%}
+
+{% block body %}
+
+
+<main>
+
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">SHARVIL KI DUKAAN</h1>
+        <p class="lead text-muted">Amazon also distributes a variety of downloadable and streaming content through its Amazon Prime Video, Amazon Music, Twitch, and Audible units. It publishes books through its publishing arm, Amazon Publishing, film and television content through Amazon Studios, and has been the owner of film and television studio Metro-Goldwyn-Mayer since March 2022. It also produces consumer electronics—most notably, Kindle e-readers, Echo devices, Fire tablets, and Fire TVs.</p>
+        <p>
+          <a href="/shop" class="btn btn-primary my-2">Go To Home</a>
+          <a href="/shop/contact" class="btn btn-secondary my-2">Contact Us</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+
+</main>
+
+<footer class="text-muted py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Back to top</a>
+    </p>
+    <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.2/getting-started/introduction/">getting started guide</a>.</p>
+  </div>
+</footer>
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+
+ $(function(){
+    $('[data-toggle="popover"]').popover(
+    {
+    title:"MY Cart",
+     content:"Here are the items of cart ",
+     placement:"bottom"});
+
+    });
+
+console.log('Working');
+
+if (localStorage.getItem('cart')==null)
+     {
+        var cart={}
+    }
+    else{
+        cart=JSON.parse(localStorage.getItem('cart'));
+        document.getElementById('cart').innerHTML=Object.keys(cart).length;
+    }
+$('.cart').click(function(){
+
+    var idstr=this.id.toString();
+    if(cart[idstr] !=undefined)
+    {
+        cart[idstr]=cart[idstr]+1;
+    }
+    else{
+        cart[idstr]=1;
+    }
+    console.log(cart);
+    localStorage.setItem('cart',JSON.stringify(cart));
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+
+});
+
+
+
+</script>
+
+
+{% endblock%}
